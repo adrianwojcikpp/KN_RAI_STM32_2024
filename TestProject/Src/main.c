@@ -44,7 +44,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-GPIO_PinState LD1_State;
+GPIO_PinState USER_Btn_State;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -96,9 +96,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
-    LD1_State = HAL_GPIO_ReadPin(LD1_GPIO_Port, LD1_Pin);
-    HAL_Delay(100);
+    USER_Btn_State = HAL_GPIO_ReadPin(USER_Btn_GPIO_Port, USER_Btn_Pin);
+    HAL_Delay(10);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
