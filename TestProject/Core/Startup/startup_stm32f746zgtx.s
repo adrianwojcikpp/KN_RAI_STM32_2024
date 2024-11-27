@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * @file      startup_stm32f756xx.s
+  * @file      startup_stm32f746xx.s
   * @author    MCD Application Team
-  * @brief     STM32F756xx Devices vector table for GCC based toolchain. 
+  * @brief     STM32F746xx Devices vector table for GCC based toolchain. 
   *            This module performs:
   *                - Set the initial SP
   *                - Set the initial PC == Reset_Handler,
@@ -59,7 +59,7 @@ defined in linker script */
   .type  Reset_Handler, %function
 Reset_Handler:  
   ldr   sp, =_estack      /* set stack pointer */
-
+  
 /* Call the clock system initialization function.*/
   bl  SystemInit   
 
@@ -93,8 +93,7 @@ FillZerobss:
 LoopFillZerobss:
   cmp r2, r4
   bcc FillZerobss
-
-
+  
 /* Call static constructors */
     bl __libc_init_array
 /* Call the application's entry point.*/
@@ -225,8 +224,8 @@ g_pfnVectors:
   .word     OTG_HS_WKUP_IRQHandler            /* USB OTG HS Wakeup through EXTI */                         
   .word     OTG_HS_IRQHandler                 /* USB OTG HS                   */                   
   .word     DCMI_IRQHandler                   /* DCMI                         */                   
-  .word     CRYP_IRQHandler                   /* Crypto                       */                   
-  .word     HASH_RNG_IRQHandler               /* Hash and Rng                 */
+  .word     0                                 /* Reserved                     */                   
+  .word     RNG_IRQHandler                    /* Rng                          */
   .word     FPU_IRQHandler                    /* FPU                          */
   .word     UART7_IRQHandler                  /* UART7                        */      
   .word     UART8_IRQHandler                  /* UART8                        */
@@ -516,11 +515,8 @@ g_pfnVectors:
    .weak      DCMI_IRQHandler            
    .thumb_set DCMI_IRQHandler,Default_Handler
 
-   .weak      CRYP_IRQHandler            
-   .thumb_set CRYP_IRQHandler,Default_Handler
-
-   .weak      HASH_RNG_IRQHandler            
-   .thumb_set HASH_RNG_IRQHandler,Default_Handler   
+   .weak      RNG_IRQHandler            
+   .thumb_set RNG_IRQHandler,Default_Handler   
 
    .weak      FPU_IRQHandler                  
    .thumb_set FPU_IRQHandler,Default_Handler

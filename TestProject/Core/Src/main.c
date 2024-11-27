@@ -24,7 +24,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,18 +45,33 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint16_t CCR = 500;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-
+unsigned int CCR = 500;
+uint8_t message[] = "0000";
+uint32_t message_size = 4;
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+/**
+  * @brief  Rx Transfer completed callback.
+  * @param  huart UART handle.
+  * @retval None
+  */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  if(huart == &huart3)
+  {
+    if(sscanf((char*)message, "%u", &CCR) == 1)
+      __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_4, CCR);
+    HAL_UART_Receive_IT(&huart3, message, message_size);
+  }
+}
 /* USER CODE END 0 */
 
 /**
@@ -92,14 +107,13 @@ int main(void)
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
+  HAL_UART_Receive_IT(&huart3, message, message_size);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_4, CCR);
-    HAL_Delay(100);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
