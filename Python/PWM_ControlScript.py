@@ -3,17 +3,17 @@ import serial
 
 # Set up the serial connection
 try:
-    ser = serial.Serial('COM2', baudrate=9600, timeout=1)
+    ser = serial.Serial('COM3', baudrate=115200, timeout=1)
 except Exception as e:
     print(f"Could not open serial port: {e}")
     ser = None
 
 def send_value(event):
     """
-    Send the slider value as a 3-digit number to the serial port when the slider is released.
+    Send the slider value as a 4-digit number to the serial port when the slider is released.
     """
-    value = slider.get()
-    formatted_value = f"{value:03}"
+    value = 10*slider.get()
+    formatted_value = f"{value:04}"
     if ser:
         ser.write(formatted_value.encode())
     print(f"Sent: {formatted_value}")
